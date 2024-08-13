@@ -1,0 +1,79 @@
+---------------------------------------------------
+
+
+-- 김현식_chap03_ex4
+
+
+-- 1. 20번 부서 소속 사원 출력하는 v_em_dno
+
+CREATE OR REPLACE VIEW v_em_dno AS
+SELECT eno, ename, dno
+FROM employee
+WHERE dno = 20;
+
+SELECT eno, ename, dno
+FROM v_em_dno;
+
+
+-- 2. v_em_dno 급여 담당업무 출력 추가
+
+CREATE OR REPLACE VIEW v_em_dno AS
+SELECT eno, ename, dno, salary, job
+FROM employee
+WHERE dno = 20;
+
+SELECT eno, ename, dno, salary, job
+FROM v_em_dno;
+
+
+-- 3.
+
+X
+
+-- 4. v_em_dno 제약 걸기
+
+CREATE OR REPLACE VIEW v_em_dno AS
+SELECT eno, ename, dno, salary, job
+FROM employee
+WITH CHECK OPTION;
+
+-- 5. v_em_dno에 데이터 입력
+
+INSERT INTO v_em_dno  VALUES (5100, 'Belita', 10, 1500, 'CLERK'); 
+INSERT INTO v_em_dno  VALUES (5200, 'Erica', 20, 2300, 'ANALYST'); 
+INSERT INTO v_em_dno  VALUES (5300, 'Kali', 30, 1750, 'SALESMAN'); 
+INSERT INTO v_em_dno  VALUES (5400, 'Mia', 20, 950, 'ANALYST'); 
+INSERT INTO v_em_dno  VALUES (5500, 'Zinna', 10, 1050, 'CLERK'); 
+
+SELECT *
+FROM v_em_dno;
+
+
+-- 6. WITH READ ONLY 부여
+
+CREATE OR REPLACE VIEW v_em_dno AS
+SELECT eno, ename, dno, salary, job
+FROM employee
+WITH READ ONLY;
+
+-- 7. emp_dno 생성
+
+CREATE OR REPLACE VIEW emp_dno AS
+SELECT a.eno, a.ename, a.dno, b.dname
+FROM employee a
+JOIN department b
+ON a.dno = b.dno;
+
+
+-- 8. 생성된 모든 뷰 조회
+
+SELECT a.eno, a.ename, a.dno, a.salary, a.job, b.dname
+FROM v_em_dno a
+JOIN emp_dno b
+ON a.dno = b.dno
+GROUP BY a.eno, a.ename, a.dno, a.salary, a.job, b.dname; -- 중복 제거
+          
+-- 9. 생성된 뷰 제거
+
+DROP VIEW v_em_dno;
+DROP VIEW emp_dno;
